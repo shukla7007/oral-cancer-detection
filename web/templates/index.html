@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oral Cancer Detection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Oral Cancer Detection</h1>
+        <p class="text-center">Upload an image to check for cancerous indicators.</p>
+
+        <form action="/" method="post" enctype="multipart/form-data" class="text-center">
+            <div class="form-group">
+                <input type="file" class="form-control-file" name="file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        <!-- Placeholder for charts and graphs -->
+        <div id="graph-section" class="mt-5">
+            <h3>Model Performance</h3>
+            <canvas id="performanceGraph" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('performanceGraph').getContext('2d');
+        const performanceGraph = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Accuracy', 'Precision', 'Recall'],
+                datasets: [{
+                    label: 'Model Metrics',
+                    data: [0.95, 0.90, 0.88],  // Add dynamic data here
+                    backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(54, 162, 235, 0.6)']
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

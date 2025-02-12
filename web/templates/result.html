@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Result</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5 text-center">
+        <h1>Detection Result</h1>
+        
+        <!-- Display Uploaded Image and Prediction Result -->
+        <div class="card mt-4" style="width: 18rem; margin: auto;">
+            <img src="{{ url_for('static', filename='images 2/' + filename) }}" class="card-img-top" alt="Uploaded Image">
+            <div class="card-body">
+                <h5 class="card-title">Result: {{ result }}</h5>
+                <p class="card-text">The uploaded image is classified as: <strong>{{ result }}</strong>.</p>
+            </div>
+        </div>
+
+        <!-- Display Cancer Overlay Image if Cancer Detected -->
+        {% if overlay_filename %}
+        <div class="card mt-4" style="width: 18rem; margin: auto;">
+            <img src="{{ url_for('static', filename='images 2/' + overlay_filename) }}" class="card-img-top" alt="Cancer Highlighted Image">
+            <div class="card-body">
+                <h5 class="card-title">Cancer Highlighted</h5>
+                <p class="card-text">Highlighted areas indicate potential cancerous regions.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Display Model Performance Metrics -->
+        <div class="mt-4">
+            <h4>Model Performance Metrics</h4>
+            <p>Accuracy: <strong>{{ accuracy * 100 }}%</strong></p>
+            <p>Precision: <strong>{{ precision * 100 }}%</strong></p>
+            <p>Recall: <strong>{{ recall * 100 }}%</strong></p>
+        </div>
+
+        <!-- Chart Section for Model Performance Metrics -->
+        <div class="mt-5">
+            <h3>Model Performance Metrics Chart</h3>
+            <canvas id="metricsChart" width="400" height="200"></canvas>
+        </div>
+
+        <a href="/" class="btn btn-primary mt-3">Upload Another Image</a>
+    </div>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Convert accuracy, precision, and recall to percentages
+        const accuracy = {{ (accuracy * 100) | tojson }};
+        const precision = {{ (precision * 100) | tojson }};
+        const recall = {{ (recall * 100) | tojson }};
+
+        // Debugging log
+        console.log("Accuracy:", accuracy);
+        console.log("Precision:", precision);
+        console.log("Recall:", recall);
+
+        const ctx = document.getElementById('metricsChart').getContext('2d');
+        const metricsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Accuracy', 'Precision', 'Recall'],
+                datasets: [{
+                    label: 'Metrics (%)',
+                    data: [accuracy, precision, recall],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)', 
+                        'rgba(255, 206, 86, 0.6)', 
+                        'rgba(54, 162, 235, 0.6)'
+                    ]
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
